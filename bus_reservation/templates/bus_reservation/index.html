@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>버스 예약</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>버스 예약</h1>
+        <form id="reservation-form">
+            <!-- 출발지 선택 -->
+            <label for="departure">출발지:</label>
+            <select id="departure" name="departure" required>
+                <option value="" disabled selected>출발지선택</option>
+                <option value="Seoul">서울</option>
+                <option value="Busan">부산</option>
+                <option value="Incheon">인천</option>
+            </select>
+
+            <!-- 도착지 선택 -->
+            <label for="destination">목적지:</label>
+            <select id="destination" name="destination" required>
+                <option value="" disabled selected>목적지선택</option>
+                <option value="Seoul">서울</option>
+                <option value="Busan">부산</option>
+                <option value="Incheon">인천</option>
+            </select>
+
+            <!-- 출발 날짜 선택 -->
+            <label for="departure-date">출발 날짜:</label>
+            <input type="date" id="departure-date" name="departure-date" required>
+
+            <!-- 출발 시간 선택 -->
+            <label for="departure-time">출발 시간:</label>
+            <input type="time" id="departure-time" name="departure-time" required>
+
+            <!-- 조회하기 버튼 -->
+            <button type="button" id="search-button">조회</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
