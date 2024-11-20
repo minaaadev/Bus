@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>고속버스 예약</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      background-color: #f9f9f9;
+    }
+
+    /* 상단 내비게이션 스타일 */
+    .navbar {
+            background-color: #fff;
+            padding: 10px 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .navbar h1 {
+            font-size: 24px;
+            margin: 0;
+        }
+
+        .navbar a {
+            text-decoration: none;
+            color: #007bff;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .header {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .header h1 {
+      font-size: 24px;
+      color: #333;
+    }
+
+    .date-info {
+      background-color: #1a4a93;
+      color: white;
+      padding: 15px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+    }
+
+    .date-info p {
+      margin: 0;
+      font-size: 18px;
+    }
+
+    .bus-schedule {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    .bus-schedule th, .bus-schedule td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    .bus-schedule th {
+      background-color: #f4f4f4;
+    }
+
+    .btn-select {
+      padding: 8px 12px;
+      background-color: #1a4a93;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .btn-select:hover {
+      background-color: #163d76;
+    }
+  </style>
+</head>
+<body>
+  <!-- 상단 내비게이션 -->
+  <div class="navbar">
+    <a href="#">홈</a> &gt; <a href="#">고속버스예매</a> &gt; <span>예매정보입력</span>
+    <h1>BusSpot</h1>
+  </div>
+
+  <div class="container">
+    <div class="header">
+      <h1>고속버스 예약</h1>
+    </div>
+
+    <div class="date-info" id="routeInfo">
+      <!-- JavaScript로 데이터 채워짐 -->
+    </div>
+
+    <table class="bus-schedule">
+      <thead>
+        <tr>
+          <th>출발</th>
+          <th>도착</th>
+          <th>등급</th>
+          <th>잔여석</th>
+          <th>선택</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>06:30</td>
+          <td>10:00</td>
+          <td>일반</td>
+          <td>28석</td>
+          <td><button class="btn-select">선택</button></td>
+        </tr>
+        <tr>
+          <td>08:00</td>
+          <td>11:30</td>
+          <td>일반</td>
+          <td>28석</td>
+          <td><button class="btn-select">선택</button></td>
+        </tr>
+        <tr>
+          <td>09:50</td>
+          <td>13:20</td>
+          <td>일반</td>
+          <td>28석</td>
+          <td><button class="btn-select">선택</button></td>
+        </tr>
+        <tr>
+          <td>11:30</td>
+          <td>15:00</td>
+          <td>일반</td>
+          <td>28석</td>
+          <td><button class="btn-select">선택</button></td>
+        </tr>
+        <tr>
+          <td>13:00</td>
+          <td>16:30</td>
+          <td>일반</td>
+          <td>28석</td>
+          <td><button class="btn-select">선택</button></td>
+        </tr>
+        <tr>
+          <td>14:30</td>
+          <td>18:00</td>
+          <td>일반</td>
+          <td>28석</td>
+          <td><button class="btn-select">선택</button></td>
+        </tr>
+        <tr>
+          <td>16:00</td>
+          <td>19:30</td>
+          <td>일반</td>
+          <td>28석</td>
+          <td><button class="btn-select">선택</button></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</body>
+</html>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const urlParams = new URLSearchParams(window.location.search);
+    const departure = urlParams.get("departure");
+    const arrival = urlParams.get("arrival");
+    const date = urlParams.get("date");
+
+    if (departure && arrival && date) {
+        document.getElementById("routeInfo").innerHTML = `
+            <p>${date}</p>
+            <p>출발: ${departure} → 도착: ${arrival}</p>
+            <p>소요 시간: 약 3시간 30분</p>
+        `;
+    } else {
+        alert("필요한 정보가 전달되지 않았습니다.");
+        window.history.back();
+    }
+
+    // 버튼 클릭 시 페이지 이동
+    const buttons = document.querySelectorAll(".btn-select");
+    buttons.forEach(button => {
+        button.addEventListener("click", function () {
+            // set_seat.html로 이동
+            window.location.href = `set_seat.html?departure=${departure}&arrival=${arrival}&date=${date}`;
+        });
+    });
+});
+</script>
+
+

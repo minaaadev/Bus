@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>출/도착지 선택</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      background-color: #f0f0f0;
+    }
+
+    .popup {
+      width: 400px;
+      background-color: white;
+      border-radius: 8px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+      padding: 20px;
+    }
+
+    .popup-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: #1a4a93;
+      color: white;
+      padding: 10px;
+      border-radius: 8px 8px 0 0;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .input-container {
+      display: flex;
+      gap: 5px;
+      margin-top: 10px;
+    }
+
+    .input-container input {
+      flex: 1;
+      padding: 8px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+    }
+
+    .search-bar {
+      margin-top: 10px;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+
+    .search-bar input[type="text"] {
+      flex: 1;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+
+    .regions-list {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .regions-list button {
+      padding: 8px;
+      background-color: #f0f0f0;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      cursor: pointer;
+      text-align: center;
+    }
+
+    .regions-list button:hover {
+      background-color: #ddd;
+    }
+
+    .popup-footer {
+      display: flex;
+      justify-content: center;
+      margin-top: 20px;
+    }
+
+    .popup-footer input[type="button"] {
+      padding: 10px 20px;
+      background-color: #333;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+
+    .popup-footer input[type="button"]:hover {
+      background-color: #555;
+    }
+  </style>
+</head>
+<body>
+  <div class="popup">
+    <div class="popup-header">출발지 선택</div>
+    
+    <div class="input-container">
+      <input type="text" placeholder="출발지" id="child_departure">
+      <input type="text" placeholder="도착지" id="destination">
+    </div>
+
+    <div class="regions-list" id="regionsList">
+      <!-- Regions will be populated here -->
+    </div>
+
+    <div class="popup-footer">
+      <input type="button" value="선택완료" onclick="confirmSelection()">
+    </div>    
+  </div>
+
+  <script>
+    const regions = [
+      '강릉', '강진', '경북도청', '경주', '경포해변', '고대조치원', '고양백석', '고창', '공주',
+      '광양', '광주', '구리', '구미', '군산', '김제', '김해', '나주', '녹동', '논산', '능주'
+      // Add more regions as needed
+    ];
+
+    let selectedRegion = "";  // 선택된 지역 저장
+
+    function renderRegions() {
+      const regionsList = document.getElementById('regionsList');
+      regionsList.innerHTML = '';
+      regions.forEach(region => {
+        const button = document.createElement('button');
+        button.textContent = region;
+        button.onclick = () => selectRegion(region);
+        regionsList.appendChild(button);
+      });
+    }
+
+    function filterRegions() {
+      const query = document.getElementById('searchInput').value.toLowerCase();
+      const filteredRegions = regions.filter(region => region.toLowerCase().includes(query));
+      const regionsList = document.getElementById('regionsList');
+      regionsList.innerHTML = '';
+      filteredRegions.forEach(region => {
+        const button = document.createElement('button');
+        button.textContent = region;
+        button.onclick = () => selectRegion(region);
+        regionsList.appendChild(button);
+      });
+    }
+
+    function selectRegion(region) {
+      selectedRegion = region;  // 선택된 지역을 저장
+      const departureInput = document.getElementById('child_departure');
+      departureInput.value = region;
+    }
+
+    // 선택완료 버튼 클릭 시 localStorage에 선택한 지역 저장 후 팝업 닫기
+    function confirmSelection() {
+    if (selectedRegion) {
+        try {
+            localStorage.setItem("selectedDeparture", selectedRegion); // 선택한 지역을 localStorage에 저장
+            window.close(); // 팝업 닫기
+        } catch (error) {
+            console.error("localStorage에 값을 설정하는 중 오류가 발생했습니다:", error);
+        }
+    } else {
+        alert("지역을 선택해주세요."); // 선택된 지역이 없을 때 경고 메시지
+    }
+}
+
+
+
+
+    // 초기 렌더링
+    renderRegions();
+  </script>
+
+</body>
+</html>

@@ -17,10 +17,19 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from bus_reservation import views
+from . import views
+# 개복치강의 from bus_reservation.api import ReservationList
 
+app_name='reservation'
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', views.home, name='index'),  
-    
+    path('', views.main, name='main'),  
+    path('<str:filename>.html', views.render_template, name='render_template'),  # 동적 URL 처리
+    path('save/', views.save_reservation, name='save_reservation'),
+    path('details/<str:id>/', views.reservation_details, name='details'),
+    # 개복치강의 path('api/reservation_list', ReservationList.as_view(), name='reservation_list')
 ]
+
+
+
