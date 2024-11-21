@@ -297,372 +297,55 @@
           totalPrice.textContent = (selectedSeatNumbers.length * seatPrice).toLocaleString();
         });
       });
+      
+
+
+
+
+      //코드 추가
+      //예약완료 버튼 클릭시 
+      document.querySelector(".reserve-button").addEventListener("click", () => {
+      
+      
+        // 선택된 데이터 JSON 생성
+         const reservationData = {
+          departure: departure,
+          arrival: arrival,
+          date: date,
+          departureTime: "10:00", // 예: 출발 시간 (수정 필요)
+          arrivalTime: "12:00",  // 예: 도착 시간 (수정 필요)
+          seatNumber: selectedSeatNumbers.join(","),
+          grade: "일반" // 예: 등급 (수정 필요)
+      }; 
+  
+      // 서버로 전송
+       fetch('http://127.0.0.1:8000/api/reservation/', {
+           method: 'POST',
+           headers: {
+               'Content-Type': 'application/json'
+           },
+           body: JSON.stringify(reservationData)
+       })
+      
+      .then(response => {
+          if (!response.ok) {
+              throw new Error(`HTTP error! status: ${response.status}`);
+          }
+          return response.json();
+      })
+      .then(data => {
+        alert(data.message);
+        // 성공 시 예약 상세 페이지로 이동
+        window.location.href = '/reservation_details.html';
+      })
+      .catch(error => {
+        console.error("Error:", error);
+        alert(error.message);
+      });
+  
+      });
     });
   </script>
   
 </body>
 </html>
-{% comment %} <!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>버스 좌석 선택</title>
-  <style>
-    body {
-        font-family: Arial, sans-serif;
-        margin: 0;
-        padding: 0;
-        background-color: #f9f9f9;
-    }
-
-/* 상단 내비게이션 스타일 */
-    .navbar {
-            background-color: #fff;
-            padding: 10px 20px;
-            border-bottom: 1px solid #ddd;
-        }
-
-        .navbar h1 {
-            font-size: 24px;
-            margin: 0;
-        }
-
-        .navbar a {
-            text-decoration: none;
-            color: #007bff;
-            font-size: 14px;
-            margin-right: 10px;
-        }
-
-    .container {
-        max-width: 1200px;
-        margin: 0 auto;
-        padding: 20px;
-        display: flex;
-        justify-content: space-between;
-        gap: 20px;
-    }
-
-    .left-panel, .right-panel {
-        background: #fff;
-        padding: 20px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        flex: 1;
-    }
-    
-    .seat-map {
-        display: grid;
-        grid-template-columns: repeat(5, 1fr);
-        gap: 10px;
-        margin-top: 20px;
-    }
-     
-    .seat {
-        padding: 15px;
-        border: 1px solid #ddd;
-        border-radius: 8px;
-        text-align: center;
-        background-color: #e6e6e6;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .seat {
-        width: 80px; /* 넓이를 줄임 */
-        height: 60px; /* 높이를 줄임 */
-        padding: 1px; /* 내부 여백을 줄임 */
-        border: 3px solid #ddd;
-        border-radius: 8px;
-        text-align: center;
-        background-color: #e6e6e6;
-        cursor: pointer;
-        transition: background-color 0.3s;
-    }
-
-    .seat.selected {
-        background-color: #007bff;
-        color: #fff;
-        font-weight: bold;
-    }
-
-    .seat.disabled {
-        background-color: #ccc;
-        pointer-events: none;
-    }
-
-    .seat:hover {
-        background-color: #0056b3;
-        color: #fff;
-        transition: background-color 0.3s, color 0.3s;
-    }
-
-    .right-panel p {
-        margin: 10px 0;
-        font-size: 16px;
-    }
-
-    .right-panel hr {
-        margin: 20px 0;
-        border: none;
-        border-top: 1px solid #ddd;
-    }
-
-    .right-panel h2 {
-        margin-top: 0;
-        font-size: 20px;
-        color: #333;
-    }
-    .summary {
-      margin-top: 20px;
-      border-top: 1px solid #ddd;
-      padding-top: 10px;
-    }
-
-    .summary p {
-      font-size: 16px;
-    }
-
-    .total {
-      font-weight: bold;
-      font-size: 18px;
-      margin-top: 10px;
-    }
-
-    /* 예약하기 버튼 스타일 */
-    .reserve-button {
-        display: block;
-        width: 100%;
-        padding: 15px;
-        margin-top: 20px;
-        background-color: #007bff;
-        color: #fff;
-        font-size: 16px;
-        font-weight: bold;
-        border: none;
-        border-radius: 8px;
-        cursor: pointer;
-        text-align: center;
-        transition: background-color 0.3s, transform 0.2s;
-    }
-
-    /* 버튼 호버 효과 */
-    .reserve-button:hover {
-        background-color: #0056b3;
-        transform: translateY(-3px);
-    }
-
-    /* 버튼 클릭 시 효과 */
-    .reserve-button:active {
-        background-color: #004494;
-        transform: translateY(1px);
-    }
-
-  </style>
-</head>
-<body>
-  <!-- 상단 내비게이션 -->
-  <div class="navbar">
-    <a href="#">홈</a> &gt; <a href="#">고속버스예매</a> &gt; <span>예매정보입력</span>
-    <h1>BusSpot</h1>
-  </div>
-
-   <div class="container">
-    <div class="left-panel">
-        <h2>좌석을 선택하세요</h2>
-        <div class="seat-map">
-            <div class="driver-seat">운전석</div>
-            <div class="space"></div>
-            <div class="space"></div>
-            <div class="space"></div>
-            <div class="driver-seat">출입구</div>
-            <!-- 좌석 생성 -->
-            <div class="seat" data-seat="1">1</div>
-            <div class="seat" data-seat="2">2</div>
-            <div class="space"></div>
-            <div class="seat" data-seat="3">3</div>
-            <div class="seat" data-seat="4">4</div>
-            <!-- 다른 줄의 좌석도 비슷한 방식으로 추가 -->
-            <div class="seat" data-seat="5">5</div>
-            <div class="seat" data-seat="6">6</div>
-            <div class="space"></div>
-            <div class="seat" data-seat="7">7</div>
-            <div class="seat" data-seat="8">8</div>
-            <!-- 다른 줄의 좌석도 비슷한 방식으로 추가 -->
-            <div class="seat" data-seat="9">9</div>
-            <div class="seat" data-seat="10">10</div>
-            <div class="space"></div>
-            <div class="seat" data-seat="11">11</div>
-            <div class="seat" data-seat="12">12</div>
-            <!-- 다른 줄의 좌석도 비슷한 방식으로 추가 -->
-            <div class="seat" data-seat="13">13</div>
-            <div class="seat" data-seat="14">14</div>
-            <div class="space"></div>
-            <div class="seat" data-seat="15">15</div>
-            <div class="seat" data-seat="16">16</div>
-            <!-- 다른 줄의 좌석도 비슷한 방식으로 추가 -->
-            <div class="seat" data-seat="17">17</div>
-            <div class="seat" data-seat="18">18</div>
-            <div class="space"></div>
-            <div class="seat" data-seat="19">19</div>
-            <div class="seat" data-seat="20">20</div>
-            <!-- 다른 줄의 좌석도 비슷한 방식으로 추가 -->
-            <div class="seat" data-seat="21">21</div>
-            <div class="seat" data-seat="22">22</div>
-            <div class="space"></div>
-            <div class="seat" data-seat="23">23</div>
-            <div class="seat" data-seat="24">24</div>
-            <!-- 다른 줄의 좌석도 비슷한 방식으로 추가 -->
-            <div class="seat" data-seat="25">25</div>
-            <div class="seat" data-seat="26">26</div>
-            <div class="space"></div>
-            <div class="seat" data-seat="27">27</div>
-            <div class="seat" data-seat="28">28</div>
-            <!-- 다른 줄의 좌석도 비슷한 방식으로 추가 -->
-            <div class="seat" data-seat="29">29</div>
-            <div class="seat" data-seat="30">30</div>
-            <div class="space"></div>
-            <div class="seat" data-seat="31">31</div>
-            <div class="seat" data-seat="32">32</div>
-            <!-- 다른 줄의 좌석도 비슷한 방식으로 추가 -->
-            <div class="seat" data-seat="33">33</div>
-            <div class="seat" data-seat="34">34</div>
-            <div class="seat" data-seat="35">35</div>
-            <div class="seat" data-seat="36">36</div>
-            <div class="seat" data-seat="37">37</div>
-            <!-- 다른 줄의 좌석도 비슷한 방식으로 추가 -->
-        </div>
-    </div>
-
-    <div class="right-panel">
-        <h2>예약 정보</h2>
-        <p><strong>예약 날짜:</strong> <span id="reservation-date">2024-11-18</span></p>
-        <p><strong>출발지 → 도착지:</strong> <span id="route-info">서울 → 부산</span></p>
-        <hr>
-        <h2>선택 정보</h2>
-        <p><strong>선택된 좌석:</strong> <span id="selected-seats">없음</span></p>
-        <p><strong>좌석당 요금:</strong> 22,300원</p>
-        <div class="summary">
-          <p>선택된 좌석 수: <span id="seat-count">0</span></p>
-          <p class="total">총 결제 금액: <span id="total-price">0</span>원</p>
-        </div>
-        <button class="reserve-button">선택완료</button>
-      </div>
-  </div>
-
-
-
-  <script>
-    document.addEventListener("DOMContentLoaded", () => {
-      // URL 파라미터 읽기
-      const urlParams = new URLSearchParams(window.location.search);
-      const departure = urlParams.get("departure");
-      const arrival = urlParams.get("arrival");
-      const date = urlParams.get("date");
-  
-      // 예약 정보에 반영
-      if (departure && arrival && date) {
-        document.getElementById("reservation-date").textContent = date;
-        document.getElementById("route-info").textContent = `${departure} → ${arrival}`;
-      } else {
-        alert("출발지, 도착지 또는 날짜 정보가 누락되었습니다.");
-        window.history.back(); // 이전 페이지로 돌아가기
-      }
-  
-      // 좌석 선택 및 가격 계산
-      const seats = document.querySelectorAll(".seat");
-      const selectedSeats = document.getElementById("selected-seats");
-      const seatCount = document.getElementById("seat-count");
-      const totalPrice = document.getElementById("total-price");
-  
-      const seatPrice = 22300;
-      let selectedSeatNumbers = [];
-  
-      seats.forEach(seat => {
-        seat.addEventListener("click", () => {
-          const seatNumber = seat.getAttribute("data-seat");
-  
-          if (seat.classList.contains("selected")) {
-            // 선택 해제
-            seat.classList.remove("selected");
-            selectedSeatNumbers = selectedSeatNumbers.filter(num => num !== seatNumber);
-          } else {
-            if (selectedSeatNumbers.length >= 6) {
-              alert("최대 6개 좌석까지만 선택 가능합니다.");
-              return;
-            }
-            // 선택
-            seat.classList.add("selected");
-            selectedSeatNumbers.push(seatNumber);
-          }
-  
-          // 업데이트
-          selectedSeats.textContent = selectedSeatNumbers.length ? selectedSeatNumbers.join(", ") : "없음";
-          seatCount.textContent = selectedSeatNumbers.length;
-          totalPrice.textContent = (selectedSeatNumbers.length * seatPrice).toLocaleString();
-        });
-      });
-
-
-
-
-
-  //데이터 서버로 전송기능 추가
-  // 선택완료 버튼 클릭 이벤트
-  const reserveButton = document.querySelector(".reserve-button");
-  reserveButton.addEventListener("click", () => {
-    if (selectedSeatNumbers.length === 0) {
-      alert("최소 1개의 좌석을 선택해야 합니다.");
-      return;
-    }
-
-    // POST 요청 데이터 준비
-    const postData = {
-      departure: departure,
-      arrival: arrival,
-      date: date,
-      departureTime : departureTime,
-      arrivalTime: arrivalTime,
-      seatNumbers: selectedSeatNumbers.join(","),
-      grade: "일반"
-      //totalPrice: selectedSeatNumbers.length * seatPrice
-    };
-
-    // POST 요청 보내기
-    fetch("/save/", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        "X-CSRFToken": getCSRFToken() // Django의 CSRF 토큰 추가
-      },
-      body: JSON.stringify(postData)
-    })
-      .then(response => response.json())
-      .then(data => {
-        if (data.id) {
-          window.location.href = `/details/${data.id}/`;
-      } else {
-          throw new Error(data.error || "예약 저장 실패");
-      }
-  })
-  .catch(error => {
-      console.error("Error:", error);
-      alert("예약 저장 중 오류가 발생했습니다.");
-  });
-});
-
-  // CSRF 토큰 가져오기 함수
-  function getCSRFToken() {
-    const cookies = document.cookie.split("; ");
-    for (const cookie of cookies) {
-      const [name, value] = cookie.split("=");
-      if (name === "csrftoken") return value;
-      }
-    return "";
-     }
-    });
-  </script> 
-  
-</body>
-</html> {% endcomment %}

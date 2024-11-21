@@ -116,60 +116,42 @@
       <button class="btn">예약 취소/환불</button>
     </div>
   </div>
-
   <script>
-    /*
-    // 샘플 데이터
-    const reservations = [
-      {
-        id: Math.random().toString(36).substr(2, 8), // 랜덤 ID 생성
-        departure: "서울",
-        arrival: "부산",
-        date: "2024-11-20",
-        departureTime: "14:00",
-        arrivalTime: "18:30",
-        seatNumber: "3A",
-        grade: "일반"
-      },
-      {
-        id: Math.random().toString(36).substr(2, 8),
-        departure: "인천",
-        arrival: "대전",
-        date: "2024-11-21",
-        departureTime: "09:00",
-        arrivalTime: "12:00",
-        seatNumber: "12B",
-        grade: "일반"
-      },
-      {
-        id: Math.random().toString(36).substr(2, 8),
-        departure: "대구",
-        arrival: "광주",
-        date: "2024-11-22",
-        departureTime: "16:00",
-        arrivalTime: "20:30",
-        seatNumber: "7C",
-        grade: "일반"
-      }
-    ];*/
+  
+ // URL에서 예약 ID 추출
+ const urlParams = new URLSearchParams(window.location.search);
+ const reservationId = urlParams.get('id');  // 예약 ID를 URL 파라미터로 전달했다고 가정
 
-    const reservation ={{ reservation|safe }};
+ // API 호출하여 예약 정보 가져오기
+ fetch(`http://127.0.0.1:8000/api/reservation/${reservationId}/`)
+ .then(response => {
+  if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+  }
+  return response.json();
+})
+.then(data => {
+  const tableBody = document.getElementById("reservation-table").getElementsByTagName("tbody")[0];
 
-    // 예약 내역을 테이블에 추가
-    const tableBody = document.getElementById("reservation-table");
-    const row = document.createElement("tr");
-      row.innerHTML = `
-        <td><input type="checkbox"></td>
-        <td>${reservation.id}</td>
-        <td>${reservation.departure}</td>
-        <td>${reservation.arrival}</td>
-        <td>${reservation.date}</td>
-        <td>${reservation.departureTime}</td>
-        <td>${reservation.arrivalTime}</td>
-        <td>${reservation.seatNumber}</td>
-        <td>${reservation.grade}</td>
-      `;
-      tableBody.appendChild(row);
+  data.forEach(reservation => {
+      const row = document.createElement("tr");
+             row.innerHTML = `
+                 <td>${reservation.id}</td>
+                 <td>${reservation.departure}</td>
+                 <td>${reservation.arrival}</td>
+                 <td>${reservation.date}</td>
+                 <td>${reservation.departureTime}</td>
+                 <td>${reservation.arrivalTime}</td>
+                 <td>${reservation.seatNumber}</td>
+                 <td>${reservation.grade}</td>
+             `;
+             tableBody.appendChild(row);
+        });
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("예약 정보를 불러오는 중 문제가 발생했습니다.");
+    });
   </script>
 </body>
 </html>
