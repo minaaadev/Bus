@@ -6,6 +6,7 @@ from . import views
 app_name='reservation'
 
 urlpatterns = [
+    path('admin/',admin.site.urls),
     path('', views.main, name='main'),  
     path('<str:filename>.html', views.render_template, name='render_template'),  # 동적 URL 처리
     

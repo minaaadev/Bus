@@ -1,6 +1,10 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
+
+  <head profile="http://www.w3.org/2005/10/profile"> <link rel="icon" type="image/png" href="http://example.com/myicon.png">
+  
+  
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>버스 좌석 선택</title>
@@ -299,9 +303,8 @@
       });
       
 
-
-
-
+    
+  
       //코드 추가
       //예약완료 버튼 클릭시 
       document.querySelector(".reserve-button").addEventListener("click", () => {
@@ -323,10 +326,10 @@
            method: 'POST',
            headers: {
                'Content-Type': 'application/json'
+               //'X-CSRFToken': csrfToken // CSRF 토큰 추가
            },
            body: JSON.stringify(reservationData)
-       })
-      
+       }) 
       .then(response => {
           if (!response.ok) {
               throw new Error(`HTTP error! status: ${response.status}`);

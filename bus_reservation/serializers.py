@@ -1,6 +1,5 @@
 from rest_framework import serializers
 from .models import Reservation
-#db와 api response 연동
 
 class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
