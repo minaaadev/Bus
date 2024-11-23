@@ -1,7 +1,7 @@
 from django.contrib import admin
 from django.urls import path
 from bus_reservation import views
-from . import views
+from .views import create_reservation, get_reservations,reservation_detail
 
 app_name='reservation'
 
@@ -12,9 +12,10 @@ urlpatterns = [
     
     # API 경로
     # 예약 저장 (POST)
-    path('api/reservation/', views.save_reservation, name='save_reservation'),
+    path('reservation/create/', create_reservation, name='create_reservation'),
+    
     # 모든 예약 조회 (GET)
-    path('api/reservations/', views.get_reservations, name='get_reservations'),    
+    path('reservations/', get_reservations, name='get_reservations'),    
     # 특정 예약 상세 조회 (GET)
-    path('api/reservation/<uuid:id>/', views.reservation_details, name='reservation_details'),
+    path('reservation/<int:pk>/', reservation_detail, name='reservation_detail'),
 ]

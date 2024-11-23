@@ -23,7 +23,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-fudyvpg#f))9)-a3$fctz#z+0pj^mfb%4rly+jjld3fldjc%l5'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 # 로컬에서만 테스트 ALLOWED_HOSTS = ['127.0.0.1', 'localhost']
 
