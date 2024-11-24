@@ -130,8 +130,23 @@
   }
   return response.json();
 })
-.then(data => {
+.then(reservation => {
   const tableBody = document.getElementById("reservation-table").getElementsByTagName("tbody")[0];
+  const row = document.createElement("tr");
+  row.innerHTML = `
+      <td>${reservation.id}</td>
+      <td>${reservation.departure}</td>
+      <td>${reservation.arrival}</td>
+      <td>${reservation.date}</td>
+      <td>${reservation.departureTime}</td>
+      <td>${reservation.arrivalTime}</td>
+      <td>${reservation.seatNumber}</td>
+      <td>${reservation.grade}</td>
+  `;
+  tableBody.appendChild(row);
+})
+//11/24
+  /*const tableBody = document.getElementById("reservation-table").getElementsByTagName("tbody")[0];
 
   data.forEach(reservation => {
       const row = document.createElement("tr");
@@ -147,7 +162,7 @@
              `;
              tableBody.appendChild(row);
         });
-    })
+    })*/
     .catch(error => {
         console.error("Error:", error);
         alert("예약 정보를 불러오는 중 문제가 발생했습니다.");

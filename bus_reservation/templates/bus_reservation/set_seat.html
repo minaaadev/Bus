@@ -315,18 +315,17 @@
           departure: departure,
           arrival: arrival,
           date: date,
-          departureTime: "10:00", // 예: 출발 시간 (수정 필요)
-          arrivalTime: "12:00",  // 예: 도착 시간 (수정 필요)
+          departureTime: "10:00", 
+          arrivalTime: "12:00",  
           seatNumber: selectedSeatNumbers.join(","),
-          grade: "일반" // 예: 등급 (수정 필요)
+          grade: "일반" 
       }; 
   
       // 서버로 전송
-       fetch('http://127.0.0.1:8000/api/reservation/', {
+       fetch('http://127.0.0.1:8000/reservation/create/', {
            method: 'POST',
            headers: {
                'Content-Type': 'application/json'
-               //'X-CSRFToken': csrfToken // CSRF 토큰 추가
            },
            body: JSON.stringify(reservationData)
        }) 
@@ -339,15 +338,14 @@
       .then(data => {
         alert(data.message);
         // 성공 시 예약 상세 페이지로 이동
-        window.location.href = '/reservation_details.html';
+        window.location.href = `/reservation_details.html?id=${data.id}`;
       })
       .catch(error => {
         console.error("Error:", error);
         alert(error.message);
       });
-  
-      });
     });
+  });
   </script>
   
 </body>
