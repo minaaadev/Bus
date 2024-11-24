@@ -44,7 +44,6 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'bus_reservation',
     'rest_framework',
-    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -55,11 +54,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
-]
-
-CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",  # 프론트엔드 도메인 추가
 ]
 
 ROOT_URLCONF = 'bus_reservation.urls'
