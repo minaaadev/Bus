@@ -10,7 +10,7 @@ class Reservation(models.Model) :
     departureTime = models.TimeField()
     arrivalTime = models.TimeField()
 
-    seatNumber = models.CharField(max_length=10)
+    seatNumber = models.CharField(max_length=20)
     grade = models.CharField(max_length=10)
 
     created_at=models.DateTimeField(auto_now_add=True) #예약 생성 시간 
