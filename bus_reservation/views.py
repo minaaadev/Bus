@@ -1,4 +1,4 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render
 from rest_framework.decorators import api_view
 from rest_framework.response import Response
 from rest_framework import status
@@ -7,9 +7,6 @@ from .serializers import ReservationSerializer
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from rest_framework.views import APIView
-from rest_framework.response import Response
-from .models import Reservation
-from .serializers import ReservationSerializer
 
 # 메인 페이지 렌더링
 def main(request):
