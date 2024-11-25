@@ -97,7 +97,7 @@
     <table>
       <thead>
         <tr>
-          <th>선택</th>
+          {% comment %} <th>선택</th> {% endcomment %}
           <th>예매 ID</th>
           <th>출발 지역</th>
           <th>도착 지역</th>
@@ -109,7 +109,7 @@
         </tr>
       </thead>
       <tbody id="reservation-table">
-        <!-- 데이터는 JavaScript로 동적 생성 -->
+        
       </tbody>
     </table>
     <div class="btn-container">
@@ -118,9 +118,8 @@
   </div>
   <script>
   
- // URL에서 예약 ID 추출
- const urlParams = new URLSearchParams(window.location.search);
- const reservationId = urlParams.get('id');  // 예약 ID를 URL 파라미터로 전달했다고 가정
+    const reservationId = new URLSearchParams(window.location.search).get("id");
+    const tableBody = document.getElementById("reservation-table");
 
  // API 호출하여 예약 정보 가져오기
  fetch(`http://127.0.0.1:8000/api/reservation/${reservationId}/`)
@@ -131,7 +130,7 @@
   return response.json();
 })
 .then(reservation => {
-  const tableBody = document.getElementById("reservation-table").getElementsByTagName("tbody")[0];
+  //const tableBody = document.getElementById("reservation-table").getElementsByTagName("tbody")[0];
   const row = document.createElement("tr");
   row.innerHTML = `
       <td>${reservation.id}</td>

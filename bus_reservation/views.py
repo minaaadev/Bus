@@ -6,7 +6,10 @@ from .models import Reservation
 from .serializers import ReservationSerializer
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
-import json
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from .models import Reservation
+from .serializers import ReservationSerializer
 
 # 메인 페이지 렌더링
 def main(request):
@@ -56,3 +59,14 @@ def reservation_detail(request, pk):
     elif request.method == 'DELETE':
         reservation.delete()
         return Response({'message': 'Reservation deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
+    
+
+#데이터를 JSON으로 반환
+class ReservationDetailAPIView(APIView):
+    def get(self, request, pk):
+        try:
+            reservation = Reservation.objects.get(pk=pk)
+            serializer = ReservationSerializer(reservation)
+            return Response(serializer.data)
+        except Reservation.DoesNotExist:
+            return Response({"error": "Reservation not found"}, status=404)
