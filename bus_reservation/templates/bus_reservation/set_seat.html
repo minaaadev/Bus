@@ -7,6 +7,7 @@
   
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <title>버스 좌석 선택</title>
   <style>
     body {
@@ -16,24 +17,39 @@
         background-color: #f9f9f9;
     }
 
-/* 상단 내비게이션 스타일 */
+    /* 스타일 설정 */
     .navbar {
-            background-color: #fff;
-            padding: 10px 20px;
-            border-bottom: 1px solid #ddd;
-        }
+      background-color: #0056b3; /* 파란색 배경 */
+      padding: 15px 30px; /* 상하, 좌우 패딩 추가 */
+      color: #fff; /* 텍스트 색상 흰색으로 설정 */
+      box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+    }
+    
+    .navbar .navbar-brand {
+        font-size: 1.5rem; /* 브랜드 텍스트 크기 조정 */
+        font-weight: bold; /* 굵은 글씨 */
+        color: #fff; /* 텍스트 흰색 */
+        margin-left: 320px; /* 오른쪽으로 320px 이동 */
+    }
+    
+    .navbar-nav .nav-link {
+        color: #fff; /* 네비게이션 링크 색상 흰색 */
+        margin-right: 20px; /* 링크 간격 추가 */
+        font-size: 1rem; /* 폰트 크기 */
+        font-weight: 500; /* 굵기 */
+    }
+    
+    .navbar-nav .nav-link:hover {
+        color: #ffd700; /* 호버 시 황금색 */
+        text-decoration: underline; /* 밑줄 추가 */
+    }
+    
+    .navbar-nav .nav-link.active {
+        color: #ffd700; /* 활성화된 링크 색상 황금색 */
+        font-weight: bold; /* 굵은 글씨 */
+    }
 
-        .navbar h1 {
-            font-size: 24px;
-            margin: 0;
-        }
 
-        .navbar a {
-            text-decoration: none;
-            color: #007bff;
-            font-size: 14px;
-            margin-right: 10px;
-        }
 
     .container {
         max-width: 1200px;
@@ -162,11 +178,34 @@
   </style>
 </head>
 <body>
-  <!-- 상단 내비게이션 -->
-  <div class="navbar">
-    <a href="#">홈</a> &gt; <a href="#">고속버스예매</a> &gt; <span>예매정보입력</span>
-    <h1>BusSpot</h1>
-  </div>
+
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">BusSpot</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">고속버스예매</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">예매정보확인</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">운행정보</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">이용안내</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">고객지원</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+  </nav>
 
    <div class="container">
     <div class="left-panel">
@@ -237,8 +276,12 @@
 
     <div class="right-panel">
         <h2>예약 정보</h2>
-        <p><strong>예약 날짜:</strong> <span id="reservation-date">2024-11-18</span></p>
-        <p><strong>출발지 → 도착지:</strong> <span id="route-info">서울 → 부산</span></p>
+        <p><strong>예약 날짜:</strong> {{ date }}</p>
+        <p><strong>출발지 → 도착지:</strong> {{ departure }} → {{ arrival }}</p>
+        <p><strong>출발 시간:</strong> {{ schedule.departure_time|date:"H:i" }}</p>
+        <p><strong>도착 시간:</strong> {{ schedule.arrival_time|date:"H:i" }}</p>
+        <p><strong>소요 시간:</strong> {{ schedule.duration }}</p>
+        <p><strong>예약된 좌석:</strong> {{ reserved_seats }}</p>
         <hr>
         <h2>선택 정보</h2>
         <p><strong>선택된 좌석:</strong> <span id="selected-seats">없음</span></p>
@@ -248,103 +291,114 @@
           <p class="total">총 결제 금액: <span id="total-price">0</span>원</p>
         </div>
         <button class="reserve-button">선택완료</button>
-      </div>
+    </div>
   </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
-      // URL 파라미터 읽기
-      const urlParams = new URLSearchParams(window.location.search);
-      const departure = urlParams.get("departure");
-      const arrival = urlParams.get("arrival");
-      const date = urlParams.get("date");
-  
-      // 예약 정보에 반영
-      if (departure && arrival && date) {
-        document.getElementById("reservation-date").textContent = date;
-        document.getElementById("route-info").textContent = `${departure} → ${arrival}`;
-      } else {
-        alert("출발지, 도착지 또는 날짜 정보가 누락되었습니다.");
-        window.history.back(); // 이전 페이지로 돌아가기
-      }
-  
-      // 좌석 선택 및 가격 계산
-      const seats = document.querySelectorAll(".seat");
-      const selectedSeats = document.getElementById("selected-seats");
-      const seatCount = document.getElementById("seat-count");
-      const totalPrice = document.getElementById("total-price");
-  
-      const seatPrice = 22300;
-      let selectedSeatNumbers = [];
-  
-      seats.forEach(seat => {
-        seat.addEventListener("click", () => {
-          const seatNumber = seat.getAttribute("data-seat");
-  
-          if (seat.classList.contains("selected")) {
-            // 선택 해제
-            seat.classList.remove("selected");
-            selectedSeatNumbers = selectedSeatNumbers.filter(num => num !== seatNumber);
-          } else {
-            if (selectedSeatNumbers.length >= 6) {
-              alert("최대 6개 좌석까지만 선택 가능합니다.");
-              return;
-            }
-            // 선택
-            seat.classList.add("selected");
-            selectedSeatNumbers.push(seatNumber);
-          }
-  
-          // 업데이트
-          selectedSeats.textContent = selectedSeatNumbers.length ? selectedSeatNumbers.join(", ") : "없음";
-          seatCount.textContent = selectedSeatNumbers.length;
-          totalPrice.textContent = (selectedSeatNumbers.length * seatPrice).toLocaleString();
-        });
-      });
-      
+        const seats = document.querySelectorAll(".seat");
+        const selectedSeats = document.getElementById("selected-seats");
+        const seatCount = document.getElementById("seat-count");
+        const totalPrice = document.getElementById("total-price");
+        const seatPrice = 22300;
+        let selectedSeatNumbers = [];
 
-    
-  
-      //코드 추가
-      //예약완료 버튼 클릭시 
-      document.querySelector(".reserve-button").addEventListener("click", () => {      
-        // 선택된 데이터 JSON 생성
-         const reservationData = {
-          departure: departure,
-          arrival: arrival,
-          date: date,
-          departureTime: "10:00", 
-          arrivalTime: "12:00",  
-          seatNumber: selectedSeatNumbers.join(","),
-          grade: "일반" 
-      }; 
-  
-      // 서버로 전송
-       fetch('http://127.0.0.1:8000/reservation/create/', {
-           method: 'POST',
-           headers: {
-               'Content-Type': 'application/json'
-           },
-           body: JSON.stringify(reservationData)
-       }) 
-      .then(response => {
-          if (!response.ok) {
-              throw new Error(`HTTP error! status: ${response.status}`);
-          }
-          return response.json();
-      })
-      .then(data => {
-        alert(data.message);
-        // 성공 시 예약 상세 페이지로 이동
-        window.location.href = `/reservation_details.html?id=${data.id}`;
-      })
-      .catch(error => {
-        console.error("Error:", error);
-        alert(error.message);
-      });
+        // 이미 예약된 좌석 정보 가져오기
+        const reservedSeatsStringArray = {{ reserved_seats|safe }}; // Django 템플릿에서 전달
+        let reservedSeats = [];
+
+        // 문자열 배열을 처리하여 숫자 배열로 변환
+        if (reservedSeatsStringArray.length > 0) {
+            reservedSeats = reservedSeatsStringArray
+                .map(group => group.split(',').map(seat => Number(seat.trim()))) // 각각 나누고 숫자로 변환
+                .flat(); // 중첩된 배열을 평탄화
+        }
+
+        console.log("Reserved Seats:", reservedSeats); // 디버깅용 출력
+
+        // 예약된 좌석 비활성화
+        seats.forEach(seat => {
+            const seatNumber = parseInt(seat.getAttribute("data-seat"), 10); // 좌석 번호를 숫자로 변환
+
+            if (reservedSeats.includes(seatNumber)) {
+                seat.classList.add("disabled");
+            }
+        });
+
+        // 좌석 선택 처리
+        seats.forEach(seat => {
+            seat.addEventListener("click", () => {
+                // 이미 예약된 좌석은 선택 불가
+                if (seat.classList.contains("disabled")) {
+                    return;
+                }
+
+                const seatNumber = parseInt(seat.getAttribute("data-seat"), 10);
+
+                if (seat.classList.contains("selected")) {
+                    seat.classList.remove("selected");
+                    selectedSeatNumbers = selectedSeatNumbers.filter(num => num !== seatNumber);
+                } else {
+                    if (selectedSeatNumbers.length >= 6) {
+                        alert("최대 6개 좌석까지만 선택 가능합니다.");
+                        return;
+                    }
+                    seat.classList.add("selected");
+                    selectedSeatNumbers.push(seatNumber);
+                }
+
+                // 선택된 좌석 정보 업데이트
+                selectedSeats.textContent = selectedSeatNumbers.length ? selectedSeatNumbers.join(", ") : "없음";
+                seatCount.textContent = selectedSeatNumbers.length;
+                totalPrice.textContent = (selectedSeatNumbers.length * seatPrice).toLocaleString();
+            });
+        });
+
+        // 예약 완료 처리
+        document.querySelector(".reserve-button").addEventListener("click", () => {
+            if (selectedSeatNumbers.length === 0) {
+                alert("최소 한 개의 좌석을 선택해야 합니다.");
+                return;
+            }
+
+            // 선택된 데이터 생성
+            const reservationData = {
+                departure: "{{ departure }}",
+                arrival: "{{ arrival }}",
+                date: "{{ date }}",
+                departureTime: "{{ schedule.departure_time|date:'H:i' }}",
+                arrivalTime: "{{ schedule.arrival_time|date:'H:i' }}",
+                seatNumber: selectedSeatNumbers.join(","), // 선택된 좌석
+                grade: "일반"
+            };
+
+            // 서버로 데이터 전송
+            fetch('http://127.0.0.1:8000/reservation/create/', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(reservationData)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(data => {
+                alert("예약이 완료되었습니다!");
+                window.location.href = `/reservation_details.html?id=${data.id}`;
+            })
+            .catch(error => {
+                console.error("Error:", error);
+                alert("예약 중 문제가 발생했습니다. 다시 시도해주세요.");
+            });
+        });
     });
-  });
-  </script>
+</script>
+
+
   
 </body>
 </html>

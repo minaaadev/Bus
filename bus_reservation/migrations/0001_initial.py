@@ -18,7 +18,7 @@ class Migration(migrations.Migration):
                 ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
                 ('departure', models.CharField(max_length=10)),
                 ('arrival', models.CharField(max_length=10)),
-                ('date', models.DateField(auto_now_add=True)),
+                ('date', models.DateField()),
                 ('departureTime', models.TimeField()),
                 ('arrivalTime', models.TimeField()),
                 ('seatNumber', models.CharField(max_length=10)),

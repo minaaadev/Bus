@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ID Search</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f9;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .container h1 {
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        .container button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .container button:hover {
+            background-color: #0056b3;
+        }
+
+        .results {
+            margin-top: 20px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>예약 정보 확인</h1>
+        <p>예매 ID를 입력하세요:</p>
+        <input type="text" id="reservation-id" placeholder="예매 ID">
+        <button onclick="searchReservation()">조회</button>
+        <div id="results" class="results"></div>  
+        <button class="back-button" onclick="window.location.href='main.html';">홈으로 돌아가기</button>
+
+    </div>
+
+    <script>
+        function searchReservation() {
+            const reservationId = document.getElementById('reservation-id').value;
+            const resultsDiv = document.getElementById('results');
+
+            // 초기화
+            resultsDiv.innerHTML = '';
+
+            if (!reservationId) {
+                resultsDiv.innerHTML = '<p style="color: red;">예매 ID를 입력해주세요.</p>';
+                return;
+            }
+
+            // 서버에 요청 보내기 
+            fetch(`http://127.0.0.1:8000/api/reservation/${reservationId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('예매 정보를 찾을 수 없습니다.');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // 데이터를 HTML로 표시
+                    resultsDiv.innerHTML = `
+                        <h3>예약 상세 정보</h3>
+                        <p><strong>출발지:</strong> ${data.departure}</p>
+                        <p><strong>도착지:</strong> ${data.arrival}</p>
+                        <p><strong>출발 시간:</strong> ${data.departureTime}</p>
+                        <strong>도착 시간:</strong> ${data.arrivalTime}</p>
+                        <p><strong>좌석 번호:</strong> ${data.seatNumber}</p>
+                    `;
+                })
+                .catch(error => {
+                    resultsDiv.innerHTML = `<p style="color: red;">${error.message}</p>`;
+                });
+        }
+    </script>
+</body>
+</html>

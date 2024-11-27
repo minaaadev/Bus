@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
   <title>고속버스 예약</title>
   <style>
     body {
@@ -12,24 +13,39 @@
       background-color: #f9f9f9;
     }
 
-    /* 상단 내비게이션 스타일 */
+    /* 스타일 설정 */
     .navbar {
-            background-color: #fff;
-            padding: 10px 20px;
-            border-bottom: 1px solid #ddd;
-        }
+        background-color: #0056b3; /* 파란색 배경 */
+        padding: 15px 30px; /* 상하, 좌우 패딩 추가 */
+        color: #fff; /* 텍스트 색상 흰색으로 설정 */
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* 그림자 효과 추가 */
+    }
+    
+    .navbar .navbar-brand {
+        font-size: 1.5rem; /* 브랜드 텍스트 크기 조정 */
+        font-weight: bold; /* 굵은 글씨 */
+        color: #fff; /* 텍스트 흰색 */
+        margin-left: 320px; /* 오른쪽으로 320px 이동 */
+    }
+    
+    .navbar-nav .nav-link {
+        color: #fff; /* 네비게이션 링크 색상 흰색 */
+        margin-right: 20px; /* 링크 간격 추가 */
+        font-size: 1rem; /* 폰트 크기 */
+        font-weight: 500; /* 굵기 */
+    }
+    
+    .navbar-nav .nav-link:hover {
+        color: #ffd700; /* 호버 시 황금색 */
+        text-decoration: underline; /* 밑줄 추가 */
+    }
+    
+    .navbar-nav .nav-link.active {
+        color: #ffd700; /* 활성화된 링크 색상 황금색 */
+        font-weight: bold; /* 굵은 글씨 */
+    }
 
-        .navbar h1 {
-            font-size: 24px;
-            margin: 0;
-        }
-
-        .navbar a {
-            text-decoration: none;
-            color: #007bff;
-            font-size: 14px;
-            margin-right: 10px;
-        }
+  
 
     .container {
       max-width: 1200px;
@@ -48,7 +64,7 @@
     }
 
     .date-info {
-      background-color: #1a4a93;
+      background-color: #007bff;
       color: white;
       padding: 15px;
       border-radius: 8px;
@@ -77,7 +93,7 @@
 
     .btn-select {
       padding: 8px 12px;
-      background-color: #1a4a93;
+      background-color: #007bff;
       color: white;
       border: none;
       border-radius: 4px;
@@ -90,113 +106,107 @@
   </style>
 </head>
 <body>
-  <!-- 상단 내비게이션 -->
-  <div class="navbar">
-    <a href="#">홈</a> &gt; <a href="#">고속버스예매</a> &gt; <span>예매정보입력</span>
-    <h1>BusSpot</h1>
-  </div>
+
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">BusSpot</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#">고속버스예매</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">예매정보확인</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">운행정보</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">이용안내</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">고객지원</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+  </nav>
 
   <div class="container">
     <div class="header">
       <h1>고속버스 예약</h1>
     </div>
 
+    <!-- check_schedule.html 템플릿에서 예약 날짜와 소요 시간 추가 -->
     <div class="date-info" id="routeInfo">
-      <!-- JavaScript로 데이터 채워짐 -->
+        <p>예약 날짜: {{ date }}</p>
+        <p>출발: {{ departure }} → 도착: {{ arrival }}</p>
     </div>
 
     <table class="bus-schedule">
       <thead>
-        <tr>
-          <th>출발</th>
-          <th>도착</th>
-          <th>등급</th>
-          <th>잔여석</th>
-          <th>선택</th>
-        </tr>
+          <tr>
+              <th>출발</th>
+              <th>도착</th>
+              <th>등급</th>
+              <th>잔여석</th>
+              <th>소요 시간</th>
+              <th>선택</th>
+          </tr>
       </thead>
       <tbody>
-        <tr>
-          <td>06:30</td>
-          <td>10:00</td>
-          <td>일반</td>
-          <td>28석</td>
-          <td><button class="btn-select">선택</button></td>
-        </tr>
-        <tr>
-          <td>08:00</td>
-          <td>11:30</td>
-          <td>일반</td>
-          <td>28석</td>
-          <td><button class="btn-select">선택</button></td>
-        </tr>
-        <tr>
-          <td>09:50</td>
-          <td>13:20</td>
-          <td>일반</td>
-          <td>28석</td>
-          <td><button class="btn-select">선택</button></td>
-        </tr>
-        <tr>
-          <td>11:30</td>
-          <td>15:00</td>
-          <td>일반</td>
-          <td>28석</td>
-          <td><button class="btn-select">선택</button></td>
-        </tr>
-        <tr>
-          <td>13:00</td>
-          <td>16:30</td>
-          <td>일반</td>
-          <td>28석</td>
-          <td><button class="btn-select">선택</button></td>
-        </tr>
-        <tr>
-          <td>14:30</td>
-          <td>18:00</td>
-          <td>일반</td>
-          <td>28석</td>
-          <td><button class="btn-select">선택</button></td>
-        </tr>
-        <tr>
-          <td>16:00</td>
-          <td>19:30</td>
-          <td>일반</td>
-          <td>28석</td>
-          <td><button class="btn-select">선택</button></td>
-        </tr>
+          {% for schedule in bus_schedules %}
+          <tr>
+              <td>{{ schedule.departure_time|date:"H:i" }}</td>
+              <td>{{ schedule.arrival_time|date:"H:i" }}</td>
+              <td>{{ schedule.bus_class }}</td>
+              <td>{{ schedule.seats_available }}석</td>
+              <td>{{ schedule.duration }}</td>
+              <td><button class="btn-select" onclick="selectBus('{{ schedule.id }}')">선택</button></td>
+          </tr>
+          {% empty %}
+          <tr>
+              <td colspan="6">해당 조건에 맞는 버스가 없습니다.</td>
+          </tr>
+          {% endfor %}
       </tbody>
-    </table>
+  </table>
   </div>
 </body>
 </html>
 
 <script>
   document.addEventListener("DOMContentLoaded", function () {
-    const urlParams = new URLSearchParams(window.location.search);
-    const departure = urlParams.get("departure");
-    const arrival = urlParams.get("arrival");
-    const date = urlParams.get("date");
+    const departure = new URLSearchParams(window.location.search).get('departure');
+    const arrival = new URLSearchParams(window.location.search).get('arrival');
+    const date = new URLSearchParams(window.location.search).get('date');
 
-    if (departure && arrival && date) {
-        document.getElementById("routeInfo").innerHTML = `
-            <p>${date}</p>
-            <p>출발: ${departure} → 도착: ${arrival}</p>
-            <p>소요 시간: 약 3시간 30분</p>
-        `;
-    } else {
-        alert("필요한 정보가 전달되지 않았습니다.");
-        window.history.back();
+    function selectBus(scheduleId) {
+      const departure = new URLSearchParams(window.location.search).get('departure');
+      const arrival = new URLSearchParams(window.location.search).get('arrival');
+      const date = new URLSearchParams(window.location.search).get('date');
+
+      if (!departure || !arrival || !date) {
+        alert("예약 정보를 찾을 수 없습니다. 다시 시도해주세요.");
+        return;
+      }
+
+      // set_seat.html로 이동
+      const queryParams = `?departure=${encodeURIComponent(departure)}&arrival=${encodeURIComponent(arrival)}&date=${encodeURIComponent(date)}&schedule_id=${scheduleId}&`;
+      window.location.href = `/set_seat.html/${queryParams}`;
     }
 
-    // 버튼 클릭 시 페이지 이동
+
+    // 버튼 클릭 이벤트 핸들러 추가
     const buttons = document.querySelectorAll(".btn-select");
     buttons.forEach(button => {
-        button.addEventListener("click", function () {
-            // set_seat.html로 이동
-            window.location.href = `set_seat.html?departure=${departure}&arrival=${arrival}&date=${date}`;
-        });
+      button.addEventListener("click", function () {
+        const scheduleId = this.getAttribute('onclick').match(/'(.+?)'/)[1];
+        selectBus(scheduleId);
+      });
     });
-});
+  });
 </script>
-

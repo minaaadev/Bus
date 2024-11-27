@@ -1,0 +1,49 @@
+from bus_reservation.models import BusSchedule
+from datetime import timedelta, time, datetime
+
+departure_city = "동서울"
+arrival_city = "부산"
+bus_class = "일반"
+seats_available = 28  # 잔여 좌석 수
+
+departure_times = [
+    time(hour=9),
+    time(hour=10),
+    time(hour=11),
+    time(hour=12),
+    time(hour=13),
+    time(hour=14),
+    time(hour=15),
+    time(hour=16),
+    time(hour=17),
+    time(hour=18),
+]
+
+duration_str = "4시간 15분"            # 소요 시간을 문자열로 정의
+
+# 각 출발 시간에 따른 BusSchedule 인스턴스 생성
+for departure_time in departure_times:
+    arrival_time = (datetime.combine(datetime.min, departure_time) + timedelta(hours=4, minutes=15)).time()
+    BusSchedule.objects.create(         # db 테이블 에 값 입력
+        departure_city=departure_city,  # 출발지
+        arrival_city=arrival_city,      # 도착지
+        departure_time=departure_time,  # 출발 시간
+        arrival_time=arrival_time,      # 도착시간
+        duration=duration_str,          # 소요 시간 추가
+        bus_class=bus_class,            # 좌석 등급
+        seats_available=seats_available # 잔여 좌석
+    )
+
+    
+
+# 위의 코드 실행 방법
+# 터미널 창 ->> python manage.py shell (쉘 스크립트 열기)
+# 위의 코드 복사 붙여넣기 ->> 정상적으로 값이 입력된 것 확인 ->> exit() 로 나가기
+
+
+# 데이터 삭제
+
+from bus_reservation.models import Reservation
+
+# Reservation 테이블의 모든 데이터 삭제
+Reservation.objects.all().delete()
