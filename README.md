@@ -2,16 +2,23 @@
 사용자가 좌석을 예약하고 예약 정보를 확인하는 과정을 Django restAPI 기반으로 구현.
 
 ## 주요 기능  
-1. **버스 조회 및 예약**  
-   - 출발지와 도착지, 날짜를 선택해 가능한 버스 목록과 좌석 상태 확인 
+### 1. **버스 조회 및 예약**
+![image](https://github.com/user-attachments/assets/f29d85f0-34d8-40e0-90e3-f9472257488e)
+   - 출발지와 도착지, 날짜를 선택해 가능한 버스 목록과 좌석 상태 확인
+![image](https://github.com/user-attachments/assets/bf0d659a-914f-43c8-938b-b7c6266a8f30)
    - 좌석 선택 후 예약 완료 처리
 
-2. **예약 정보 확인**  
-   - 예약 ID를 통해 예약 정보를 확인 가능
+<br>
+
+### 2. **예약 정보 확인** 
+
+![image](https://github.com/user-attachments/assets/8585e3ee-db77-4e1b-9a9f-d884a01a54d2)
+   - 예약 ID를 조회해 예약 정보 확인 가능
+
+<br>
 
 ## 기술 스택  
 - **Backend**: Python, Django  
-- **Database**: SQLite3  
 - **Frontend**:JavaScript Fetch API
 
 ## 파일 구조  
