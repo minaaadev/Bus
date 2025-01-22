@@ -23,7 +23,7 @@ POST /reservation/create - 예약 저장
 
 GET /reservations/ - 모든 예약 조회
 
-GET /api/reservation/<id>/ - 특정 예약 조회
+GET /api/reservation/\<id\>/ - 특정 예약 조회
 
 <br>
 
