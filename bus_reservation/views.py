@@ -139,7 +139,7 @@ def reservation_detail(request, pk):
         return Response({'message': 'Reservation deleted successfully'}, status=status.HTTP_204_NO_CONTENT)
     
 
-#데이터를 JSON으로 반환
+# 특정 id 예약정보 조회
 class ReservationDetailAPIView(APIView):
     def get(self, request, pk):
         try:
