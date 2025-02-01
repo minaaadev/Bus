@@ -26,9 +26,5 @@ urlpatterns = [
     path('reservations/', views.get_reservations, name='get_reservations'),    
     
     #데이터를 JSON으로 반환하는 API
-    path('api/reservation/<int:pk>/', ReservationDetailAPIView.as_view(), name='reservation-detail'),
-
-    #path('id_search/', views.id_search, name='id_search'),  # id_search.html로 연결
-    path('api/reservation/<int:id>/', views.reservation_details, name='reservation_details'),  # 특정 예매 조회 API
-
+    path('api/reservation/<int:pk>/', ReservationDetailAPIView.as_view(), name='reservation-detail')
 ]
