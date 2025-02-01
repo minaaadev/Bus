@@ -150,12 +150,3 @@ class ReservationDetailAPIView(APIView):
             return Response({"error": "Reservation not found"}, status=404)
         
 
-# views.py
-@api_view(['GET'])
-def reservation_details(request, reservation_id):
-    try:
-        reservation = Reservation.objects.get(id=reservation_id)
-        serializer = ReservationSerializer(reservation)
-        return Response(serializer.data)  # 확인: 데이터의 필드 이름이 무엇인지 점검
-    except Reservation.DoesNotExist:
-        return Response({'error': 'Reservation not found'}, status=404)
